@@ -36,5 +36,6 @@ bin/
 *.swp
 
 **/config.yaml
+**/config.prod.yaml
 **/data
 **/docker

@@ -18,6 +18,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-kratos/kratos/v2/log"
@@ -279,7 +280,7 @@ func (ref *RefactorUseCase) readFile(ctx context.Context, fileName string, fileB
 
 	lastSurplus := ""
 	//allLines := make([]*[30]string, 0)
-	dc := make(chan *Opinion, 200)
+	dc := make(chan *Opinion, 50)
 	//ch := make(chan struct{}, 10000)
 	_ = gp.Submit(func() {
 		for {
@@ -367,7 +368,7 @@ func GetStrCn(str string) (cnStr string) {
 	r := []rune(str)
 	var strSlice []string
 	for i := 0; i < len(r); i++ {
-		if r[i] <= 40869 && r[i] >= 19968 {
+		if (r[i] <= 40869 && r[i] >= 19968) || unicode.IsPunct(r[i]) {
 			cnStr = cnStr + string(r[i])
 			strSlice = append(strSlice, cnStr)
 		}

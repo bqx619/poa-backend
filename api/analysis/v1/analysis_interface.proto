@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package api.analysis.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "poa-service/api/analysis/v1;v1";
+
+service AnalysisInterface {
+
+	rpc RunAnalysis (RunAnalysisRequest) returns (RunAnalysisReply) {
+		option (google.api.http) = {
+			put: "/analysis/v1/run"
+			body: "*"
+		};
+	}
+	rpc Top10Category (Top10CategoryRequest) returns (Top10Reply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/category/top10"
+		};
+	}
+	rpc Top10Area (Top10AreaRequest) returns (Top10Reply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/area/top10"
+		};
+	}
+	rpc Top10Keywords (Top10KeywordsRequest) returns (Top10Reply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/keywords/top10"
+		};
+	}
+	rpc EmotionDistribute (EmotionDistributeRequest) returns (EmotionDistributeReply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/emotion/distribute"
+		};
+	}
+	rpc EmotionNotice (EmotionNoticeRequest) returns (EmotionNoticeReply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/emotion/notice"
+		};
+	}
+	rpc GetAnalysis (GetAnalysisRequest) returns (GetAnalysisReply) {
+		option (google.api.http) = {
+			get: "/analysis/v1/{id}"
+		};
+	}
+	rpc ListAnalysis (ListAnalysisRequest) returns (ListAnalysisReply) {
+		option (google.api.http) = {
+			get: "/analysis/v1"
+		};
+	}
+}
+
+message AnalysisInfo {
+	int64 ts = 1;
+	string uid = 2;
+	string orig_h = 3;
+	string resp_h = 4;
+	string domain = 5;
+	string proto = 6;
+	string area = 7;
+	repeated string keywords = 8;
+	string category = 9;
+	int32 emotion = 10;
+	int64 op_id = 11;
+}
+
+message GetAnalysisRequest {
+	int64 id = 1;
+}
+
+message GetAnalysisReply {
+		AnalysisInfo info = 1;
+}
+
+message ListAnalysisRequest {
+	string sort = 1;
+	string sort_type = 2;
+	int64 page_size = 3;
+	int64 current = 4;
+	string domain = 5;
+	string uid = 6;
+}
+
+message ListAnalysisReply {
+	repeated AnalysisInfo infos = 1;
+	int64 total = 2;
+}
+
+message RunAnalysisRequest {}
+message RunAnalysisReply {}
+
+message EmotionNoticeRequest {}
+message EmotionNoticeReply {
+	string status = 1;
+	string msg = 2;
+}
+
+message Top10CategoryRequest {}
+
+message Top10 {
+	string name = 1;
+	int64 count = 2;
+}
+
+message Top10Reply {
+	repeated Top10 top10 = 1;
+}
+
+message Top10AreaRequest {}
+message Top10KeywordsRequest {}
+
+message EmotionDistributeRequest {}
+
+message EmotionDistributeReply {
+	int64 positive = 1;
+	int64 neutral = 2;
+	int64 negative = 3;
+}

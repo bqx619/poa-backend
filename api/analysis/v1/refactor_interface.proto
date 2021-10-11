@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package api.refactor.v1;
+import "google/api/annotations.proto";
+option go_package = "poa-service/api/refactor/v1;v1";
+
+service RefactorInterface {
+	rpc RecapRefactor (RecapRefactorRequest) returns (RecapRefactorReply) {
+		option (google.api.http) = {
+			get: "/refactor/v1/survey"
+		};
+	};
+	rpc GetRefactor (GetRefactorRequest) returns (GetRefactorReply) {
+		option (google.api.http) = {
+			get: "/refactor/v1/{id}"
+		};
+	};
+	rpc ListRefactor (ListRefactorRequest) returns (ListRefactorReply) {
+		option (google.api.http) = {
+			get: "/refactor/v1"
+		};
+	};
+	rpc RunRefactor (RunRefactorRequest) returns (RunRefactorReply) {
+		option (google.api.http) = {
+			put: "/refactor/v1/run"
+			body: "*"
+		};
+	}
+}
+
+enum Status {
+	RUNNING = 0;
+	HANGING = 1;
+	STOP = 2;
+}
+
+message RefactorRefactorInfo {
+	int64 id = 1;
+	string dir = 2;
+	int64 day = 3;
+	string type = 4;
+	int32 begin_hour = 5;
+	int32 end_hour = 6;
+	string md5 = 7;
+	int64 create_time = 8;
+	int64 update_time = 9;
+
+}
+
+message RecapRefactorRequest {}
+
+message RecapRefactorReply {
+	Status status = 1;
+	int32 running = 2;
+	int32 success = 3;
+	int32 failed = 4;
+	int32 waiting = 5;
+}
+
+message GetRefactorRequest {
+	int64 id = 1;
+}
+
+message GetRefactorReply {
+	RefactorRefactorInfo info = 1;
+}
+
+message ListRefactorRequest {
+	string sort = 1;
+	string sort_type = 2;
+	int64 page_size = 3;
+	int64 current = 4;
+	int64 id = 5;
+	int64 day = 6;
+	string dir = 7;
+}
+
+message ListRefactorReply {
+	repeated RefactorRefactorInfo infos = 1;
+	int64 total = 2;
+}
+
+message RunRefactorRequest {}
+
+message RunRefactorReply {}

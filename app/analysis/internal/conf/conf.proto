@@ -1,0 +1,65 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "analysis/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Ext ext = 3;
+  ZeekLog zeek_log = 4;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Data {
+  message Database {
+    string driver = 1;
+    string source = 2;
+  }
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration read_timeout = 3;
+    google.protobuf.Duration write_timeout = 4;
+  }
+  Database database = 1;
+  Redis redis = 2;
+}
+
+message ZeekLog {
+  string dir = 1;
+  google.protobuf.Duration interval = 2;
+  google.protobuf.Duration timeout = 3;
+  string dir_name_format = 4;
+  string file_name_format = 5;
+  string extension = 6;
+}
+
+message Ext {
+  message Baidu {
+    string app_id = 1;
+    string secret_key = 2;
+  }
+  message Tencent {
+    string secret_id = 1;
+    string secret_key = 2;
+  }
+  Baidu baidu = 1;
+  Tencent tencent = 2;
+}
